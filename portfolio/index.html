@@ -1,0 +1,306 @@
+<!--
+Single-file responsive portfolio site
+Filename: portfolio_single_page.html
+How to use:
+1. Save this file as `index.html` in a folder.
+2. Add your resume PDF as `resume.pdf` in the same folder or change the link in the Resume section.
+3. Replace placeholder images and project links with your own.
+4. To deploy on GitHub Pages: push this repo (with index.html) to GitHub and enable Pages from the repo settings (branch: main, folder: / root).
+5. To deploy on Netlify: drag & drop the folder to Netlify Sites or connect your Git repo and set build to "" (no build) and publish.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Your Name — Portfolio</title>
+  <meta name="description" content="Personal portfolio showcasing skills, projects and contact info." />
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#98a0b3; --accent:#7c3aed; --glass: rgba(255,255,255,0.04);
+      --radius:14px; --maxw:1100px; --gap:20px; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:linear-gradient(180deg,#071026 0%, #071022 60%);color:#e6eef8;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+    .container{width:95%;max-width:var(--maxw);}
+
+    /* Header */
+    header{width:100%;position:sticky;top:12px;z-index:50}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));backdrop-filter: blur(6px);}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#2dd4bf);display:flex;align-items:center;justify-content:center;font-weight:700;color:white}
+    nav ul{list-style:none;display:flex;gap:14px;margin:0;padding:0}
+    nav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:8px}
+    nav a:hover, nav a.active{color:white;background:var(--glass)}
+    .cta{display:inline-block;padding:8px 12px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#4f46e5);color:white;text-decoration:none}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:center;padding:52px 0}
+    .intro h1{font-size:2.1rem;margin:0 0 8px}
+    .intro p{margin:0;color:var(--muted);line-height:1.6}
+    .tags{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+    .tag{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:999px;color:var(--muted);font-size:0.85rem}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:var(--radius);box-shadow:0 6px 18px rgba(2,6,23,0.5)}
+    .profile{display:flex;flex-direction:column;align-items:center;gap:12px}
+    .profile img{width:100%;height:260px;object-fit:cover;border-radius:12px}
+    .socials{display:flex;gap:10px}
+    .icon{width:40px;height:40px;border-radius:10px;background:var(--glass);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none}
+
+    /* Sections */
+    section{padding:40px 0}
+    h2{margin:0 0 14px;font-size:1.25rem}
+    .muted{color:var(--muted)}
+
+    /* Projects grid */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
+    .project{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;overflow:hidden;transition:transform .25s ease, box-shadow .25s ease;cursor:pointer}
+    .project:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(2,6,23,0.6)}
+    .project img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+    .project h3{margin:8px 0 6px}
+    .project p{margin:0;color:var(--muted);font-size:0.9rem}
+
+    /* Resume */
+    .resume{display:flex;flex-direction:column;gap:12px}
+    .download{display:inline-flex;gap:8px;align-items:center;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,0.03);text-decoration:none;color:white}
+
+    /* Contact */
+    .contact-grid{display:grid;grid-template-columns:1fr 360px;gap:20px}
+    form{display:flex;flex-direction:column;gap:10px}
+    input,textarea{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    button{padding:10px 14px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent),#4f46e5);color:white}
+
+    footer{padding:24px 0;color:var(--muted);text-align:center}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr;}
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .contact-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:560px){
+      nav ul{display:none}
+      .nav{padding:10px}
+      .profile img{height:200px}
+      .grid{grid-template-columns:1fr}
+    }
+
+    /* Simple reveal animations */
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease}
+    .reveal.visible{opacity:1;transform:none}
+
+    /* small helpers */
+    .flex{display:flex;align-items:center}
+    .space{height:18px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="nav">
+        <div class="brand">
+          <div class="logo">PT</div>
+          <div>
+            <div style="font-weight:700">Pratik Thange</div>
+            <div style="font-size:12px;color:var(--muted)">•Frontend Developer  </div>
+          </div>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#projects" class="nav-link">Projects</a></li>
+            <li><a href="#resume" class="nav-link">Resume</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+          </ul>
+        </nav>
+        <a class="cta" href="#contact">Work with me</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="intro card reveal">
+          <h1>Hi, I'm Pratik Thange</h1>
+          <p>I'm a frontend developer who builds accessible, responsive and delightful user experiences. I love turning ideas into pixel-perfect interfaces and scalable code.</p>
+          <div class="tags">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">Java</span>
+            <span class="tag">My SQL</span>
+          </div>
+          <div style="margin-top:18px;display:flex;gap:10px">
+            <a href="#projects" class="cta">See projects</a>
+            <a href="#resume" style="padding:8px 12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.04);text-decoration:none;color:var(--muted)">Download CV</a>
+          </div>
+        </div>
+
+        <aside class="card profile reveal">
+          <img src="C:\Users\prati\OneDrive\Desktop\Codealpha portfolio\images\profile.jpg" alt="profile"/>
+          <div style="text-align:center">
+            <div style="font-weight:700">Pratik Thange</div>
+            <div class="muted" style="font-size:13px">Pune • Student</div>
+          </div>
+          <div class="socials">
+            <a class="icon" href="#">GH</a>
+            <a class="icon" href="#">LI</a>
+            <a class="icon" href="#">TW</a>
+          </div>
+        </aside>
+      </section>
+
+      <section id="about" class="reveal">
+        <h2>About</h2>
+        <div class="card">
+          <p class="muted">I design and code beautifully simple things, and I love what I do. My focus is building accessible, responsive web applications that help users complete tasks quickly and joyfully. I have experience working on startup products and personal projects using modern JS stacks.</p>
+          <div class="space"></div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <div class="card" style="flex:1;min-width:220px;padding:14px"> 
+              <strong>Experience</strong>
+              <div class="muted" style="margin-top:8px">1+ years building web apps and components</div>
+            </div>
+            <div class="card" style="flex:1;min-width:220px;padding:14px">
+              <strong>Education</strong>
+              <div class="muted" style="margin-top:8px">Pursuing BE in Information Technology (currently in 3rd year)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" class="reveal">
+        <h2>Projects</h2>
+        <div class="grid">
+          <div class="project" onclick="openProject(1)">
+            <img src="C:\Users\prati\OneDrive\Desktop\Codealpha portfolio\images\Antisleep.jpg" alt="project"/>
+            <h3>Antisleep Alarm for Drivers</h3>
+            <p class="muted">A short description — An anti-sleep alarm for drivers is a safety device that detects drowsiness and alerts the driver with sound or vibration to prevent accidents.</p>
+          </div>
+          <div class="project" onclick="openProject(2)">
+            <img src="C:\Users\prati\OneDrive\Desktop\Codealpha portfolio\images\vill.jpg" alt="project"/>
+            <h3>Villa Booking</h3>
+            <p class="muted">E-commerce website, A villa booking website that lets users browse, book, update, and manage villa reservations online.</p>
+          </div>
+          <div class="project" onclick="openProject(3)">
+            <img src="C:\Users\prati\OneDrive\Desktop\Codealpha portfolio\images\Amazon Clone.png" alt="project"/>
+            <h3>Amazon Web Clone</h3>
+            <p class="muted">An Amazon Web clone frontend showcasing product listings, search, and UI features without backend functionality.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="resume" class="reveal">
+        <h2>Resume</h2>
+        <div class="card resume">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <div>
+              <strong>Download my CV</strong>
+              <div class="muted">Click to download or view online</div>
+            </div>
+            <div>
+             <a class="download" href="C:\Users\prati\OneDrive\Desktop\Codealpha portfolio\New folder\resume.webp" target="_blank" rel="noreferrer">⬇️ View Resume</a>
+
+            </div>
+          </div>
+          <div style="margin-top:12px">
+            <strong>Skills</strong>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+              <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Java</span><span class="tag">My SQL</span><span class="tag">MongoDB</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="reveal">
+        <h2>Contact</h2>
+        <div class="card contact-grid">
+          <div>
+            <p class="muted">Want to work together or have a question? Send a message and I'll get back to you.</p>
+            <div style="height:12px"></div>
+            <form onsubmit="handleContact(event)">
+              <input type="text" id="name" placeholder="Your name" required />
+              <input type="email" id="email" placeholder="Your email" required />
+              <textarea id="message" rows="6" placeholder="Your message" required></textarea>
+              <button type="submit">Send message</button>
+            </form>
+          </div>
+          <aside style="display:flex;flex-direction:column;gap:12px">
+            <div class="card">
+              <strong>Say hi</strong>
+              <div class="muted" style="margin-top:8px">pratikthange94@gmail.com</div>
+              <div class="muted">+91 942158****</div>
+            </div>
+            <div class="card">
+              <strong>Location</strong>
+              <div class="muted" style="margin-top:8px">City, Country</div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <div id="projectModal" style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.6);align-items:center;justify-content:center;padding:20px;z-index:60">
+        <div style="background:#071024;padding:18px;border-radius:12px;max-width:900px;width:100%;box-shadow:0 18px 40px rgba(2,6,23,0.7)">
+          <button onclick="closeModal()" style="float:right;background:transparent;border:0;color:var(--muted);font-size:18px">✕</button>
+          <div id="modalContent"></div>
+        </div>
+      </div>
+
+    </main>
+
+    <footer>
+      <div class="muted">© <span id="year"></span> Your Name — Built with ❤️ • <a href="#" style="color:var(--muted);text-decoration:underline">Terms</a></div>
+    </footer>
+  </div>
+
+  <script>
+    // small helpers: set year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Reveal on scroll
+    const revealEls = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target)}});
+    },{threshold:0.15});
+    revealEls.forEach(el=>obs.observe(el));
+
+    // Active nav link on scroll
+    const sections = Array.from(document.querySelectorAll('main section'));
+    const navLinks = document.querySelectorAll('.nav-link');
+    const navObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        const id = entry.target.id;
+        const link = document.querySelector('.nav-link[href="#'+id+'"]');
+        if(entry.isIntersecting){ navLinks.forEach(l=>l.classList.remove('active')); if(link) link.classList.add('active'); }
+      });
+    },{threshold:0.45});
+    sections.forEach(s=>navObserver.observe(s));
+
+    // Simple project modal
+    const projects = {
+      1:{title:'Project One',desc:'Detailed description for project one. Tech: HTML, CSS, JS. Role: Developer. Link: <a target="_blank" href="#">View live</a>'},
+      2:{title:'Project Two',desc:'Detailed description for project two. Tech: React, Node. Role: Full-stack.'},
+      3:{title:'Project Three',desc:'Detailed description for project three. Tech: D3.js. Role: Data viz.'}
+    };
+    function openProject(i){
+      const modal = document.getElementById('projectModal');
+      document.getElementById('modalContent').innerHTML = `\n        <h2>${projects[i].title}</h2>\n        <p class=\"muted\">${projects[i].desc}</p>\n      `;
+      modal.style.display='flex';
+    }
+    function closeModal(){ document.getElementById('projectModal').style.display='none'; }
+
+    // Contact handler (demo) – replace with netlify/EmailJS/function as needed
+    function handleContact(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      if(!name||!email||!message) return alert('Please fill all fields');
+      // For demo we'll open mail client
+      window.location.href = `mailto:youremail@example.com?subject=Message from ${encodeURIComponent(name)}&body=${encodeURIComponent(message + '\n\n' + email)}`;
+    }
+
+    // Keyboard accessibility: close modal on Esc
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+  </script>
+</body>
+</html>
